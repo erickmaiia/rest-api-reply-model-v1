@@ -4,7 +4,7 @@ This is an API built with [FastAPI](https://fastapi.tiangolo.com/) that utilizes
 
 # About model
 
-Access this [repository](https://github.com/erickmaiia/financial_sentiment_analysis_model)
+Access this [repository](https://www.kaggle.com/code/supreethrao/bert-s-a-stock-market-guru-86-22-huggingface)
 
 ## Routes
 
