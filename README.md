@@ -34,30 +34,6 @@ This route receives a JSON object containing the text to be processed and return
 }
 ```
 
-## How to Use
-
-1. Clone this repository:
-
-```bash
-git clone https://github.com/erickmaiia/rest-api-reply-model-v1.git
-```
-
-2. Install dependencies:
-
-```bash
-pip install -r requirements.txt
-```
-
-3. Download the model [here](https://drive.google.com/file/d/1jR_cnpLoxHq9Pue95F0C5c1QI-XKM31A/view?usp=sharing) and place it in the models directory
-
-4. Run the server:
-
-```bash
-uvicorn main:app --reload
-```
-
-5. Make a GET request to http://localhost:8000/ to return an API welcome
-
 ## Production API
 
 The API is hosted on the GCP. You can access it at https://rest-api-dus2eb35vq-uc.a.run.app/process_text/.
