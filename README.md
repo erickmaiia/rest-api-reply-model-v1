@@ -40,4 +40,4 @@ The API is hosted on the GCP. You can access it at https://rest-api-dus2eb35vq-u
 
 You can visually access [here](https://interface-reply-model.vercel.app/) or click in the image.
 
-[<img src="./interface-reply-model.vercel.app.png" alt="img">](https://interface-reply-model.vercel.app/)
+[<img src="./image/interface-reply-model.vercel.app.png" alt="img">](https://interface-reply-model.vercel.app/)
