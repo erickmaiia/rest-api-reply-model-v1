@@ -12,6 +12,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Instalar as dependências específicas do nltk
 RUN python -m nltk.downloader punkt
+RUN python -m nltk.downloader punkt_tab
 
 # Copiar o código da aplicação para o diretório de trabalho
 COPY . .
