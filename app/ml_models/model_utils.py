@@ -10,12 +10,12 @@ MODEL_PATHS = {
     "Naive Bayes": os.path.join(os.path.dirname(__file__), "Naive_Bayes_model.joblib"),
     "SVM": os.path.join(os.path.dirname(__file__), "SVM_model.joblib"),
     "XGBoost": os.path.join(os.path.dirname(__file__), "XGBoost_model.joblib"),
-    # "LightGBM": os.path.join(os.path.dirname(__file__), "LightGBM_model.joblib"),
-    # "Multilayer Perceptron": os.path.join(os.path.dirname(__file__), "Multilayer_Perceptron_model.joblib"),
-    # "Gradient Boosting": os.path.join(os.path.dirname(__file__), "Gradient_Boosting_model.joblib"),
-    # "Random Forest": os.path.join(os.path.dirname(__file__), "Random_Forest_model.joblib"),
-    # "AdaBoost": os.path.join(os.path.dirname(__file__), "AdaBoost_model.joblib"),
-    # "Decision Tree": os.path.join(os.path.dirname(__file__), "Decision_Tree_model.joblib"),
+    "LightGBM": os.path.join(os.path.dirname(__file__), "LightGBM_model.joblib"),
+    "Multilayer Perceptron": os.path.join(os.path.dirname(__file__), "Multilayer_Perceptron_model.joblib"),
+    "Gradient Boosting": os.path.join(os.path.dirname(__file__), "Gradient_Boosting_model.joblib"),
+    "Random Forest": os.path.join(os.path.dirname(__file__), "Random_Forest_model.joblib"),
+    "AdaBoost": os.path.join(os.path.dirname(__file__), "AdaBoost_model.joblib"),
+    "Decision Tree": os.path.join(os.path.dirname(__file__), "Decision_Tree_model.joblib"),
 }
 
 
@@ -71,7 +71,8 @@ def predict_text_all_models(models, vectorizer, text):
     além da distribuição das previsões.
     """
     predictions = {}
-    sentiment_distribution = defaultdict(int)  # Contador para a distribuição das previsões
+    sentiment_distribution = {"positive": 0, "neutral": 0, "negative": 0}
+    
     text_vector = vectorizer.transform([text])  # Transforma o texto em uma representação numérica
 
     for model_name, model in models.items():
@@ -90,6 +91,10 @@ def predict_text_all_models(models, vectorizer, text):
         # Converte a previsão em sentimento
         sentiment = assign_sentiment_alias(int(prediction))
 
+        # Atualiza a distribuição de sentimentos
+        if sentiment in sentiment_distribution:
+            sentiment_distribution[sentiment] += 1
+
         # Adiciona as estatísticas e informações
         predictions[model_name] = {
             "sentiment": sentiment,
@@ -97,11 +102,8 @@ def predict_text_all_models(models, vectorizer, text):
             "confidence": confidence,
         }
 
-        # Incrementa a contagem da distribuição das previsões
-        sentiment_distribution[sentiment] += 1
-
-    # Adiciona a distribuição das previsões ao dicionário de resultados
-    predictions["sentiment_distribution"] = dict(sentiment_distribution)
+    # Adiciona a distribuição de sentimentos ao dicionário de predições
+    predictions["sentiment_distribution"] = sentiment_distribution
 
     return predictions
 

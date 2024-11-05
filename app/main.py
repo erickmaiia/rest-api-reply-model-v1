@@ -39,6 +39,7 @@ def predict_text_endpoint(request: TextPredictRequest):
 def predict_text_endpoint(request: TextPredictRequest):
     try:
         # Carrega o modelo baseado na escolha do usuário
+
         models, vectorizer = load_text_model(request.model)
 
         # Usa a função predict_text para fazer a previsão com o modelo e o vetor carregados
