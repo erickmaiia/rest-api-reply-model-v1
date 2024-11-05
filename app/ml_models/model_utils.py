@@ -1,4 +1,5 @@
-from sklearn.feature_extraction.text import TfidfVectorizer
+import time
+from collections import defaultdict
 import joblib
 import os
 
@@ -61,24 +62,7 @@ def predict_text(model, vectorizer, text):
     sentiment = assign_sentiment_alias(int(prediction))
     return sentiment
 
-import time
 
-# Dicionário fictício de precisões para cada modelo
-model_accuracies = {
-    "Naive Bayes": 68.67,
-    "SVM": 75.2,
-    "XGBoost": 74.0,
-    "LightGBM": 71.9,
-    "Multilayer Perceptron": 70.99,
-    "Gradient Boosting": 70.77,
-    "Random Forest": 70.62,
-    "AdaBoost": 69.5,
-    "Decision Tree": 63.34,
-}
-import time
-
-import time
-from collections import defaultdict
 
 def predict_text_all_models(models, vectorizer, text):
     """
