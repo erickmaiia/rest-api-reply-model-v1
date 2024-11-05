@@ -3,11 +3,20 @@ import joblib
 import os
 
 # Definir os caminhos dos modelos
+import os
+
 MODEL_PATHS = {
     "Naive Bayes": os.path.join(os.path.dirname(__file__), "Naive_Bayes_model.joblib"),
     "SVM": os.path.join(os.path.dirname(__file__), "SVM_model.joblib"),
-    "XGBoost": os.path.join(os.path.dirname(__file__), "XGBoost_model.joblib")
+    "XGBoost": os.path.join(os.path.dirname(__file__), "XGBoost_model.joblib"),
+    # "LightGBM": os.path.join(os.path.dirname(__file__), "LightGBM_model.joblib"),
+    # "Multilayer Perceptron": os.path.join(os.path.dirname(__file__), "Multilayer_Perceptron_model.joblib"),
+    # "Gradient Boosting": os.path.join(os.path.dirname(__file__), "Gradient_Boosting_model.joblib"),
+    # "Random Forest": os.path.join(os.path.dirname(__file__), "Random_Forest_model.joblib"),
+    # "AdaBoost": os.path.join(os.path.dirname(__file__), "AdaBoost_model.joblib"),
+    # "Decision Tree": os.path.join(os.path.dirname(__file__), "Decision_Tree_model.joblib"),
 }
+
 
 # Definir o caminho do vetorizador
 VECTORIZER_PATH = os.path.join(os.path.dirname(__file__), "tfidf_vectorizer.pkl")
@@ -32,8 +41,16 @@ def load_text_model(model_choice):
         model = joblib.load(model_path)
         vectorizer = joblib.load(VECTORIZER_PATH)
         return model, vectorizer
+    
+    elif model_choice == "All":
+        models = {}
+        for model_name, model_path in MODEL_PATHS.items():
+            model = joblib.load(model_path)
+            models[model_name] = model
+        vectorizer = joblib.load(VECTORIZER_PATH)
+        return models, vectorizer
     else:
-        raise ValueError("Modelo inválido. Escolha entre 'Naive Bayes', 'SVM' ou 'XGBoost'.")
+        raise ValueError("Modelo inválido.")
 
 def predict_text(model, vectorizer, text):
     """
@@ -43,3 +60,66 @@ def predict_text(model, vectorizer, text):
     prediction = model.predict(text_vector)[0]
     sentiment = assign_sentiment_alias(int(prediction))
     return sentiment
+
+import time
+
+# Dicionário fictício de precisões para cada modelo
+model_accuracies = {
+    "Naive Bayes": 68.67,
+    "SVM": 75.2,
+    "XGBoost": 74.0,
+    "LightGBM": 71.9,
+    "Multilayer Perceptron": 70.99,
+    "Gradient Boosting": 70.77,
+    "Random Forest": 70.62,
+    "AdaBoost": 69.5,
+    "Decision Tree": 63.34,
+}
+import time
+
+import time
+from collections import defaultdict
+
+def predict_text_all_models(models, vectorizer, text):
+    """
+    Função para fazer uma previsão de sentimento baseada no texto e em todos os modelos disponíveis,
+    incluindo estatísticas como tempo de inferência e confiança na previsão,
+    além da distribuição das previsões.
+    """
+    predictions = {}
+    sentiment_distribution = defaultdict(int)  # Contador para a distribuição das previsões
+    text_vector = vectorizer.transform([text])  # Transforma o texto em uma representação numérica
+
+    for model_name, model in models.items():
+        # Medir tempo de inferência
+        start_time = time.time()
+        prediction = model.predict(text_vector)[0]
+        inference_time = time.time() - start_time
+
+        # Confiança na previsão (se disponível)
+        try:
+            confidence = max(model.predict_proba(text_vector)[0]) * 100  # Em porcentagem
+            confidence = float(confidence)  # Converte para float nativo, se necessário
+        except AttributeError:
+            confidence = None  # Modelo não suporta probabilidade
+
+        # Converte a previsão em sentimento
+        sentiment = assign_sentiment_alias(int(prediction))
+
+        # Adiciona as estatísticas e informações
+        predictions[model_name] = {
+            "sentiment": sentiment,
+            "inference_time_ms": round(inference_time * 1000, 2),
+            "confidence": confidence,
+        }
+
+        # Incrementa a contagem da distribuição das previsões
+        sentiment_distribution[sentiment] += 1
+
+    # Adiciona a distribuição das previsões ao dicionário de resultados
+    predictions["sentiment_distribution"] = dict(sentiment_distribution)
+
+    return predictions
+
+
+

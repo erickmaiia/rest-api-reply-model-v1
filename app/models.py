@@ -6,3 +6,6 @@ class TextPredictRequest(BaseModel):
 
 class TextPredictResponse(BaseModel):
     prediction: str  # Campo para a previsão gerada pelo modelo
+
+class TextPredictResponseAll(BaseModel):
+    prediction: dict  # Campo para a previsão gerada por todos os modelos
