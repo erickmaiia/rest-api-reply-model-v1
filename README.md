@@ -59,50 +59,50 @@ This route receives a JSON object containing the text to be processed and return
 ```json
 {
     "prediction": {
+        "Decision Tree": {
+            "sentiment": "positive",
+            "inference_time_ms": 0.0,
+            "confidence": 100.0
+        },
+        "Multilayer Perceptron": {
+            "sentiment": "positive",
+            "inference_time_ms": 0.0,
+            "confidence": 99.79286726748342
+        },
+        "Random Forest": {
+            "sentiment": "neutral",
+            "inference_time_ms": 4.0,
+            "confidence": 72.0
+        },
+        "Gradient Boosting": {
+            "sentiment": "neutral",
+            "inference_time_ms": 1.0,
+            "confidence": 65.40153464625972
+        },
         "Naive Bayes": {
             "sentiment": "neutral",
-            "inference_time_ms": 1.39,
+            "inference_time_ms": 0.0,
             "confidence": 58.39391454926953
-        },
-        "SVM": {
-            "sentiment": "positive",
-            "inference_time_ms": 2.58,
-            "confidence": null
         },
         "XGBoost": {
             "sentiment": "neutral",
-            "inference_time_ms": 10.35,
+            "inference_time_ms": 4.0,
             "confidence": 55.5428581237793
         },
         "LightGBM": {
             "sentiment": "positive",
-            "inference_time_ms": 5.57,
+            "inference_time_ms": 79.11,
             "confidence": 54.753866556500896
-        },
-        "Multilayer Perceptron": {
-            "sentiment": "positive",
-            "inference_time_ms": 1.05,
-            "confidence": 99.79286726748342
-        },
-        "Gradient Boosting": {
-            "sentiment": "neutral",
-            "inference_time_ms": 71.19,
-            "confidence": 65.40153464625972
-        },
-        "Random Forest": {
-            "sentiment": "neutral",
-            "inference_time_ms": 4.67,
-            "confidence": 72.0
         },
         "AdaBoost": {
             "sentiment": "neutral",
-            "inference_time_ms": 94.48,
+            "inference_time_ms": 6.0,
             "confidence": 34.21799931861368
         },
-        "Decision Tree": {
+        "SVM": {
             "sentiment": "positive",
-            "inference_time_ms": 0.17,
-            "confidence": 100.0
+            "inference_time_ms": 1.0,
+            "confidence": null
         },
         "sentiment_distribution": {
             "positive": 4,
