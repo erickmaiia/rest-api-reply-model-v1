@@ -1,6 +1,12 @@
 # Use uma imagem base Python
 FROM python:3.10-slim
 
+# Atualizar o sistema e instalar libgomp
+RUN apt-get update && \
+    apt-get install -y libgomp1 && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
 # Definir o diretório de trabalho dentro do container
 WORKDIR /app
 
