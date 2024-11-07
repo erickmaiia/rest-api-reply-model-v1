@@ -38,7 +38,7 @@ This route receives a JSON object containing the text to be processed and return
 
 #### `POST /predict_text_all_models`
 
-This route receives a JSON object containing the text to be processed and returns the sentiment associated with that text.
+This route receives a JSON object containing the text to be processed and returns all sentiment associated with that text across all models.
 
 #### Parameters
 
