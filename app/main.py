@@ -1,11 +1,12 @@
 from fastapi import FastAPI, HTTPException
 from app.models import TextPredictRequest, TextPredictResponse, TextPredictResponseAll
-from app.ml_models.model_utils import load_text_model, predict_text, predict_text_all_models
+from app.model_utils import load_text_model, predict_text, predict_text_all_models
 from fastapi.middleware.cors import CORSMiddleware
 
 # Inicializar o FastAPI
 app = FastAPI()
 
+# Adiciona middleware CORS para permitir chamadas de qualquer origem
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -18,34 +19,33 @@ app.add_middleware(
 def read_root():
     return {"message": "Welcome to the Text Analysis API"}
 
+def handle_prediction_request(model_name: str, text: str, all_models: bool = False):
+    """
+    Função auxiliar para centralizar a lógica de carregamento de modelos e previsão,
+    tanto para um único modelo quanto para todos os modelos.
+    """
+    try:
+        if all_models:
+            models, vectorizer = load_text_model("All")  # Carrega todos os modelos
+            predictions = predict_text_all_models(models, vectorizer, text)
+            return TextPredictResponseAll(prediction=predictions)
+        else:
+            model, vectorizer = load_text_model(model_name)  # Carrega o modelo selecionado
+            prediction = predict_text(model, vectorizer, text)
+            return TextPredictResponse(prediction=str(prediction))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error during prediction: {str(e)}")
+
 @app.post("/predict_text", response_model=TextPredictResponse)
 def predict_text_endpoint(request: TextPredictRequest):
-    try:
-        # Carrega o modelo baseado na escolha do usuário
-        model, vectorizer = load_text_model(request.model)
+    """
+    Endpoint para previsão com um único modelo escolhido pelo usuário.
+    """
+    return handle_prediction_request(request.model, request.text)
 
-        # Usa a função predict_text para fazer a previsão com o modelo e o vetor carregados
-        prediction = predict_text(model, vectorizer, request.text)
-
-        # Converte a previsão para string
-        prediction_str = str(prediction)
-
-        return TextPredictResponse(prediction=prediction_str)
-    except Exception as e:
-        # Retorna uma exceção HTTP em caso de erro
-        raise HTTPException(status_code=500, detail=str(e))
-    
 @app.post("/predict_text_all_models", response_model=TextPredictResponseAll)
-def predict_text_endpoint(request: TextPredictRequest):
-    try:
-        # Carrega o modelo baseado na escolha do usuário
-
-        models, vectorizer = load_text_model(request.model)
-
-        # Usa a função predict_text para fazer a previsão com o modelo e o vetor carregados
-        predictions = predict_text_all_models(models, vectorizer, request.text)
-
-        return TextPredictResponseAll(prediction=predictions)
-    except Exception as e:
-        # Retorna uma exceção HTTP em caso de erro
-        raise HTTPException(status_code=500, detail=str(e))
+def predict_text_all_models_endpoint(request: TextPredictRequest):
+    """
+    Endpoint para previsão com todos os modelos disponíveis.
+    """
+    return handle_prediction_request(request.model, request.text, all_models=True)

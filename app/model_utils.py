@@ -1,42 +1,35 @@
 import time
-from collections import defaultdict
 import joblib
 import os
 
-# Definir os caminhos dos modelos
-import os
+# Caminho para a pasta ml_models
+ML_MODELS_PATH = os.path.join(os.path.dirname(__file__), "ml_models")
 
+# Atualizar os caminhos dos modelos para apontar para a pasta ml_models
 MODEL_PATHS = {
-    "Naive Bayes": os.path.join(os.path.dirname(__file__), "Naive_Bayes_model.joblib"),
-    "SVM": os.path.join(os.path.dirname(__file__), "SVM_model.joblib"),
-    "XGBoost": os.path.join(os.path.dirname(__file__), "XGBoost_model.joblib"),
-    "LightGBM": os.path.join(os.path.dirname(__file__), "LightGBM_model.joblib"),
-    "Multilayer Perceptron": os.path.join(os.path.dirname(__file__), "Multilayer_Perceptron_model.joblib"),
-    "Gradient Boosting": os.path.join(os.path.dirname(__file__), "Gradient_Boosting_model.joblib"),
-    "Random Forest": os.path.join(os.path.dirname(__file__), "Random_Forest_model.joblib"),
-    "AdaBoost": os.path.join(os.path.dirname(__file__), "AdaBoost_model.joblib"),
-    "Decision Tree": os.path.join(os.path.dirname(__file__), "Decision_Tree_model.joblib"),
+    "Naive Bayes": os.path.join(ML_MODELS_PATH, "Naive_Bayes_model.joblib"),
+    "SVM": os.path.join(ML_MODELS_PATH, "SVM_model.joblib"),
+    "XGBoost": os.path.join(ML_MODELS_PATH, "XGBoost_model.joblib"),
+    "LightGBM": os.path.join(ML_MODELS_PATH, "LightGBM_model.joblib"),
+    "Multilayer Perceptron": os.path.join(ML_MODELS_PATH, "Multilayer_Perceptron_model.joblib"),
+    "Gradient Boosting": os.path.join(ML_MODELS_PATH, "Gradient_Boosting_model.joblib"),
+    "Random Forest": os.path.join(ML_MODELS_PATH, "Random_Forest_model.joblib"),
+    "AdaBoost": os.path.join(ML_MODELS_PATH, "AdaBoost_model.joblib"),
+    "Decision Tree": os.path.join(ML_MODELS_PATH, "Decision_Tree_model.joblib"),
 }
 
-
-# Definir o caminho do vetorizador
-VECTORIZER_PATH = os.path.join(os.path.dirname(__file__), "tfidf_vectorizer.pkl")
+# Caminho do vetorizador
+VECTORIZER_PATH = os.path.join(ML_MODELS_PATH, "tfidf_vectorizer.pkl")
 
 def assign_sentiment_alias(prediction):
-    if prediction == 0:
-        return "negative"
-    elif prediction == 1:
-        return "neutral"
-    elif prediction == 2:
-        return "positive"
-    else:
-        return "unknown"
+    """Atribui um rótulo de sentimento baseado na previsão numérica."""
+    sentiment_mapping = {0: "negative", 1: "neutral", 2: "positive"}
+    return sentiment_mapping.get(prediction, "unknown")
 
 def load_text_model(model_choice):
     """
     Carrega o modelo e o vetorizador baseado no modelo escolhido pelo usuário.
     """
-
     if model_choice in MODEL_PATHS:
         model_path = MODEL_PATHS[model_choice]
         model = joblib.load(model_path)
@@ -46,8 +39,7 @@ def load_text_model(model_choice):
     elif model_choice == "All":
         models = {}
         for model_name, model_path in MODEL_PATHS.items():
-            model = joblib.load(model_path)
-            models[model_name] = model
+            models[model_name] = joblib.load(model_path)
         vectorizer = joblib.load(VECTORIZER_PATH)
         return models, vectorizer
     else:
@@ -62,13 +54,11 @@ def predict_text(model, vectorizer, text):
     sentiment = assign_sentiment_alias(int(prediction))
     return sentiment
 
-
-
 def predict_text_all_models(models, vectorizer, text):
     """
     Função para fazer uma previsão de sentimento baseada no texto e em todos os modelos disponíveis,
-    incluindo estatísticas como tempo de inferência e confiança na previsão,
-    além da distribuição das previsões.
+    incluindo estatísticas como tempo de inferência, confiança na previsão e distribuição das previsões.
+    A previsão final é ordenada com base na confiança.
     """
     predictions = {}
     sentiment_distribution = {"positive": 0, "neutral": 0, "negative": 0}
@@ -102,10 +92,10 @@ def predict_text_all_models(models, vectorizer, text):
             "confidence": confidence,
         }
 
+    # Ordena as previsões por confiança (do maior para o menor)
+    sorted_predictions = dict(sorted(predictions.items(), key=lambda item: item[1]["confidence"] if item[1]["confidence"] is not None else 0, reverse=True))
+
     # Adiciona a distribuição de sentimentos ao dicionário de predições
-    predictions["sentiment_distribution"] = sentiment_distribution
+    sorted_predictions["sentiment_distribution"] = sentiment_distribution
 
-    return predictions
-
-
-
+    return sorted_predictions
