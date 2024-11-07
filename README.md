@@ -24,7 +24,7 @@ This route receives a JSON object containing the text to be processed and return
 ```json
 {
   "text": "$ESI on lows, down $1.50 to $2.50 BK a real possibility."
-  "model: "SVM"
+  "model": "SVM"
 }
 ```
 
@@ -50,7 +50,7 @@ This route receives a JSON object containing the text to be processed and return
 ```json
 {
   "text": "$ESI on lows, down $1.50 to $2.50 BK a real possibility."
-  "model: "All"
+  "model": "All"
 }
 ```
 
