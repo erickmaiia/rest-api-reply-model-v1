@@ -27,15 +27,15 @@ Key technologies and libraries used in this project include:
 
 **Interactive Documentation Access**:  
 
-- Swagger UI: [https://rest-api-reply-model-v1.onrender.com/docs](https://rest-api-reply-model-v1.onrender.com/docs)  
-- ReDoc: [https://rest-api-reply-model-v1.onrender.com/redoc](https://rest-api-reply-model-v1.onrender.com/redoc)  
+- Swagger UI: [https://rest-api-reply-model-v1.fly.dev/docs](https://rest-api-reply-model-v1.fly.dev/docs)
+- ReDoc: [https://rest-api-reply-model-v1.fly.dev/redoc](https://rest-api-reply-model-v1.fly.dev/redoc)
 
 ### Endpoints Overview  
 
-#### 1. **`POST /model_prediction/`**  
+#### 1. **`POST /model_prediction`**  
 Performs sentiment analysis based on a provided text and specified model.  
 
-#### 2. **`POST /multi_model_prediction/`**  
+#### 2. **`POST /multi_model_prediction`**  
 Performs sentiment analysis using multiple models on a provided text.  
 
 - **Available Models**:  
