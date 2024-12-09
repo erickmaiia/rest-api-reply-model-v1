@@ -1,9 +1,10 @@
 from fastapi import FastAPI
-from app.routes.llm_routes import router as llm_router
+from app.routes import router as api_router
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
+# Configuração do CORS
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -12,8 +13,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Incluindo as rotas do LLM
-app.include_router(llm_router)
+# Incluindo as rotas
+app.include_router(api_router)
 
 @app.get("/")
 def read_root():
