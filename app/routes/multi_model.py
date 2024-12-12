@@ -23,7 +23,7 @@ async def multi_model_prediction(request: Request, body: MultiModelAnalysisReque
         sentiment_results = predict_prompt_multi_models(models, cleaned_prompt)
 
         # Salvar no banco de dados usando função utilitária
-        #save_multi_model_prediction(db, request.prompt, sentiment_results)
+        save_multi_model_prediction(db, request.prompt, sentiment_results)
 
         return MultiModelAnalysisResponse(
             prompt=body.prompt,

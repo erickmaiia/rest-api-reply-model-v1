@@ -26,7 +26,7 @@ async def model_prediction(
         sentiment = predict_prompt(model, cleaned_prompt)
 
         # Salvar no banco de dados usando função utilitária
-        #save_model_prediction(db, request.prompt, request.model, sentiment)
+        save_model_prediction(db, request.prompt, request.model, sentiment)
 
         return TextAnalysisResponse(
             prompt=body.prompt, 
