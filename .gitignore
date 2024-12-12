@@ -1,0 +1,13 @@
+*.swp
+**/__pycache__
+/venv/
+/.pyenv/
+/.idea/
+Include
+Lib
+Library
+Scripts
+share
+pyvenv.cfg
+.env
+BERT.safetensors
